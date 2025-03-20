@@ -132,5 +132,10 @@ table {
 
 * {
   box-sizing: border-box;
+}
+
+body {
   font-size: 1rem;
+  background-color: #45505a;
+  font-family: 'Montserrat', sans-serif;
 }
