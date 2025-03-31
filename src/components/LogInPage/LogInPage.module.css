@@ -36,7 +36,7 @@ label {
   border-color: #f39c12;
 }
 
-button {
+.logOutBtn {
   width: 100%;
   padding: 14px;
   background-color: #f39c12;
@@ -46,13 +46,14 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 1.2rem;
+  margin-top: 20px;
 }
 
-button:hover {
+.logOutBtn:hover {
   background-color: #e67e22;
 }
 
-.error {
+.errorValid {
   color: #e74c3c;
   font-size: 1rem;
   margin-bottom: 12px;

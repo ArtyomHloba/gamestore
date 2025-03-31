@@ -99,7 +99,7 @@ function LogInPage() {
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className={styles.error}
+                  className={styles.errorValid}
                 />
 
                 <label>Password:</label>
@@ -113,10 +113,14 @@ function LogInPage() {
                 <ErrorMessage
                   name="password"
                   component="div"
-                  className={styles.error}
+                  className={styles.errorValid}
                 />
 
-                <button type="submit" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={styles.logOutBtn}
+                >
                   {isSubmitting ? "Logging in..." : "Log in"}
                 </button>
               </Form>
