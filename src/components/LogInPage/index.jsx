@@ -94,6 +94,7 @@ function LogInPage() {
                   type="email"
                   placeholder="example@mail.com"
                   required
+                  className={styles.inputField}
                 />
                 <ErrorMessage
                   name="email"
@@ -107,6 +108,7 @@ function LogInPage() {
                   type="password"
                   placeholder="Password"
                   required
+                  className={styles.inputField}
                 />
                 <ErrorMessage
                   name="password"

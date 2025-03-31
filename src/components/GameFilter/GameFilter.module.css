@@ -1,0 +1,40 @@
+.filterContainer {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: #2c3e50;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  flex-wrap: wrap;
+}
+
+.searchInput,
+.selectGames {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  background: #34495e;
+  color: white;
+}
+
+.filterContainer input[type="text"] {
+  width: 200px;
+}
+
+.filterContainer select {
+  width: 150px;
+}
+
+.filterContainer input[type="range"] {
+  flex: 1;
+  accent-color: #f39c12;
+}
+
+.filterContainer span {
+  font-weight: bold;
+  font-size: 16px;
+  color: #f39c12;
+}
