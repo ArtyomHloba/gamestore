@@ -7,33 +7,56 @@ import styles from "./LogInPage.module.css";
 function LogInPage() {
   const [error, setError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = await supabase.auth.getUser();
-      if (user.data) {
-        setCurrentUser(user.data);
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        setError("Error fetching user data");
+        return;
+      }
+      if (data?.user) {
+        setCurrentUser(data.user);
+        fetchUserData(data.user.email);
       }
     };
+
+    const fetchUserData = async email => {
+      const { data, error } = await supabase
+        .from("user")
+        .select("user_name")
+        .eq("email", email)
+        .single();
+
+      if (error) {
+        setError("Error fetching profile data");
+        return;
+      }
+      setUserData(data);
+    };
+
     fetchUser();
   }, []);
 
   const handleLogin = async (values, { setSubmitting }) => {
     setError("");
+
     try {
-      const { data: user, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
       });
 
       if (error) {
         setError(`Login error: ${error.message}`);
-      } else {
-        setCurrentUser(user);
-        alert("Login successful!");
+      } else if (data?.user) {
+        setCurrentUser(data.user);
+        fetchUserData(data.user.email);
+        alert("You have successfully logged in!");
       }
     } catch (err) {
-      setError("Unable to process the request. Please try again later.");
+      setError("Failed to process request. Please try again later.");
     } finally {
       setSubmitting(false);
     }
@@ -42,13 +65,19 @@ function LogInPage() {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setCurrentUser(null);
+    setUserData(null);
   };
 
   return (
     <div className={styles.logInForm}>
-      <h2>{currentUser ? `Hello, ${currentUser.email}` : "Log In"}</h2>
+      <h2>
+        {currentUser ? `Hello, ${userData?.user_name || "User"}!` : "Log in"}
+      </h2>
       {currentUser ? (
-        <button onClick={handleSignOut}>Sign Out</button>
+        <>
+          <p>Email: {currentUser.email}</p>
+          <button onClick={handleSignOut}>Log out</button>
+        </>
       ) : (
         <>
           {error && <p className={styles.error}>{error}</p>}
@@ -86,7 +115,7 @@ function LogInPage() {
                 />
 
                 <button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Logging in..." : "Log In"}
+                  {isSubmitting ? "Logging in..." : "Log in"}
                 </button>
               </Form>
             )}
