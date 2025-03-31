@@ -1,0 +1,75 @@
+.gameList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.gameCard {
+  background-color: #262d35;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gameCard:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.gameImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.gameCard h3 {
+  font-size: 1.3rem;
+  margin: 10px;
+  text-align: center;
+}
+
+.gameCard p {
+  font-size: 0.9rem;
+  margin: 0 10px 5px;
+  flex: 1;
+}
+
+.price {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #27ae60;
+  margin: 5px 10px;
+}
+
+.genre {
+  font-size: 0.8rem;
+  margin: 0 10px 5px;
+  color: #b2bec3;
+}
+
+.buyButton {
+  background-color: #f39c12;
+  color: #fff;
+  border: none;
+  border-radius: 0 0 10px 10px;
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.buyButton:hover {
+  background-color: #e67e22;
+}
