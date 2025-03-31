@@ -1,22 +1,27 @@
-import { IoGameControllerOutline } from 'react-icons/io5'
-import styles from './Header.module.css'
+import { IoGameControllerOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import styles from "./Header.module.css";
 
-function Header () {
+function Header() {
   return (
     <header className={styles.headerPage}>
       <div className={styles.logoContainer}>
-        <a href='/' className={styles.logo}>
+        <Link to="/" className={styles.logo}>
           <IoGameControllerOutline />
-        </a>
+        </Link>
         <p>Game Store</p>
       </div>
 
       <div className={styles.signUpContainer}>
-        <button className={styles.loginBtn}>Login</button>
-        <button className={styles.signUpBtn}>Sign up</button>
+        <Link to="/login">
+          <button className={styles.loginBtn}>Login</button>
+        </Link>
+        <Link to="/signup">
+          <button className={styles.signUpBtn}>Sign up</button>
+        </Link>
       </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;
