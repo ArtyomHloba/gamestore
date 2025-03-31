@@ -6,9 +6,11 @@ import styles from "./SignUpPage.module.css";
 
 function SignUpPage() {
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSignUp = async (values, { setSubmitting }) => {
     setError("");
+    setMessage("");
     try {
       const { data, error } = await supabase.auth.signUp({
         email: values.email,
@@ -33,13 +35,15 @@ function SignUpPage() {
         if (insertError) {
           setError(insertError.message);
         } else {
-          alert("Registration successful!");
+          setMessage(
+            "🎉 Registration successful! Please check your email 📩 and confirm your account to get started."
+          );
         }
       } else {
-        setError("Error: User not created.");
+        setError("Oops! Something went wrong. Please try again.");
       }
     } catch (err) {
-      setError("Registration error");
+      setError("An unexpected error occurred. Please try again later.");
     } finally {
       setSubmitting(false);
     }
@@ -47,17 +51,23 @@ function SignUpPage() {
 
   return (
     <div className={styles.signUpForm}>
-      <h2>Sign Up</h2>
-      {error && <p className={styles.error}>{error}</p>}
+      <h2>Join Us Today 🚀</h2>
+      {error && <p className={styles.error}>❌ {error}</p>}
+      {message && <p className={styles.success}>✅ {message}</p>}
       <Formik
         initialValues={{ userName: "", email: "", password: "" }}
         validationSchema={signUpValidationSchema}
         onSubmit={handleSignUp}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className={styles.formContainer}>
             <label>Name:</label>
-            <Field name="userName" type="text" placeholder="Your name" />
+            <Field
+              name="userName"
+              type="text"
+              placeholder="Enter your name"
+              className={styles.inputField}
+            />
             <ErrorMessage
               name="userName"
               component="div"
@@ -65,7 +75,12 @@ function SignUpPage() {
             />
 
             <label>Email:</label>
-            <Field name="email" type="email" placeholder="example@mail.com" />
+            <Field
+              name="email"
+              type="email"
+              placeholder="Your email address"
+              className={styles.inputField}
+            />
             <ErrorMessage
               name="email"
               component="div"
@@ -73,15 +88,24 @@ function SignUpPage() {
             />
 
             <label>Password:</label>
-            <Field name="password" type="password" placeholder="Password" />
+            <Field
+              name="password"
+              type="password"
+              placeholder="Create a password"
+              className={styles.inputField}
+            />
             <ErrorMessage
               name="password"
               component="div"
               className={styles.error}
             />
 
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Registering..." : "Sign Up"}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={styles.submitButton}
+            >
+              {isSubmitting ? "Creating your account..." : "Sign Up"}
             </button>
           </Form>
         )}
