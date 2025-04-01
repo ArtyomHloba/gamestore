@@ -13,7 +13,6 @@ function LogInPage() {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getUser();
       if (error) {
-        setError("Error fetching user data");
         return;
       }
       if (data?.user) {
@@ -30,7 +29,6 @@ function LogInPage() {
         .single();
 
       if (error) {
-        setError("Error fetching profile data");
         return;
       }
       setUserData(data);
