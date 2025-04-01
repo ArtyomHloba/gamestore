@@ -76,7 +76,9 @@ function LogInPage() {
       {currentUser ? (
         <>
           <p>Email: {currentUser.email}</p>
-          <button onClick={handleSignOut}>Log out</button>
+          <button className={styles.logOutBtn} onClick={handleSignOut}>
+            Log out
+          </button>
         </>
       ) : (
         <>
@@ -117,9 +119,9 @@ function LogInPage() {
                 />
 
                 <button
+                  className={styles.logOutBtn}
                   type="submit"
                   disabled={isSubmitting}
-                  className={styles.logOutBtn}
                 >
                   {isSubmitting ? "Logging in..." : "Log in"}
                 </button>
