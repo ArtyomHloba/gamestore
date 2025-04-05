@@ -4,24 +4,31 @@ import styles from "./MyGames.module.css";
 
 function MyGames() {
   const [gamesWithKeys, setGamesWithKeys] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMyGames = async () => {
+      setLoading(true);
+
       const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        console.error("Пользователь не авторизован");
+        console.error("User is not authenticated:", userError);
+        setLoading(false);
         return;
       }
+
+      console.log("User ID:", user.id);
 
       const { data, error } = await supabase
         .from("copies")
         .select(
           `
           game_key,
+          user_id,
           game:game_id (
             title,
             image,
@@ -33,44 +40,49 @@ function MyGames() {
         .eq("user_id", user.id);
 
       if (error) {
-        console.error("Ошибка при получении игр:", error);
+        console.error("Error fetching games:", error);
       } else {
+        console.log("Fetched games:", data);
         setGamesWithKeys(data);
       }
+
+      setLoading(false);
     };
 
     fetchMyGames();
   }, []);
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>🎮 Мои игры</h2>
-      {gamesWithKeys.length === 0 ? (
-        <p>У вас пока нет купленных игр.</p>
+    <div className={styles.container}>
+      <h2>My Games</h2>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : gamesWithKeys.length === 0 ? (
+        <p>You don't have any purchased games yet.</p>
       ) : (
-        <div style={{ display: "grid", gap: "1rem" }}>
+        <div className={styles.grid}>
           {gamesWithKeys.map((item, index) => (
-            <div
-              key={index}
-              style={{
-                border: "1px solid #ddd",
-                padding: "1rem",
-                borderRadius: "10px",
-              }}
-            >
-              <img
-                src={item.game.image}
-                alt={item.game.title}
-                style={{ width: "150px" }}
-              />
-              <h3>{item.game.title}</h3>
-              <p>{item.game.description}</p>
-              <p>
-                <strong>Жанр:</strong> {item.game.genre}
-              </p>
-              <p>
-                <strong>Ключ игры:</strong> <code>{item.game_key}</code>
-              </p>
+            <div key={index} className={styles.card}>
+              {item.game ? (
+                <>
+                  <img
+                    src={item.game.image}
+                    alt={item.game.title}
+                    className={styles.image}
+                  />
+                  <h3>{item.game.title}</h3>
+                  <p>{item.game.description}</p>
+                  <p>
+                    <strong>Genre:</strong> {item.game.genre}
+                  </p>
+                  <p>
+                    <strong>Game Key:</strong> <code>{item.game_key}</code>
+                  </p>
+                </>
+              ) : (
+                <p>Game not found or has been removed</p>
+              )}
             </div>
           ))}
         </div>
