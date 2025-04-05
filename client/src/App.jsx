@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import GameCard from "./components/GameCard";
 import SignUpPage from "./components/SignUpPage";
 import LogInPage from "./components/LogInPage";
+import MyGames from "./components/MyGames";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<GameCard />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LogInPage />} />
+        <Route path="/my-games" element={<MyGames />} />
       </Routes>
     </Router>
   );

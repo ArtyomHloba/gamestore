@@ -13,6 +13,9 @@ function Header() {
       </div>
 
       <div className={styles.signUpContainer}>
+        <Link to="/my-games">
+          <button className={styles.loginBtn}>Profile</button>
+        </Link>
         <Link to="/login">
           <button className={styles.loginBtn}>Login</button>
         </Link>
