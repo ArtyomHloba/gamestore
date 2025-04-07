@@ -47,7 +47,7 @@ function GameCard() {
     const stripe = await stripePromise;
 
     const response = await fetch(
-      "http://localhost:4242/create-checkout-session",
+      "http://localhost:5000/create-checkout-session",
       {
         method: "POST",
         headers: {
