@@ -51,12 +51,14 @@ function MyGames() {
 
   return (
     <div className={styles.container}>
-      <h2>My Games</h2>
+      <h2 className={styles.title}>My Games</h2>
 
       {loading ? (
-        <p>Loading...</p>
+        <p className={styles.loading}>Loading...</p>
       ) : gamesWithKeys.length === 0 ? (
-        <p>You don't have any purchased games yet.</p>
+        <p className={styles.noGames}>
+          You don't have any purchased games yet.
+        </p>
       ) : (
         <div className={styles.grid}>
           {gamesWithKeys.map((item, index) => (
@@ -68,17 +70,19 @@ function MyGames() {
                     alt={item.game.title}
                     className={styles.image}
                   />
-                  <h3>{item.game.title}</h3>
-                  <p>{item.game.description}</p>
-                  <p>
+                  <h3 className={styles.gameTitle}>{item.game.title}</h3>
+                  <p className={styles.description}>{item.game.description}</p>
+                  <p className={styles.genre}>
                     <strong>Genre:</strong> {item.game.genre}
                   </p>
-                  <p>
+                  <p className={styles.gameKey}>
                     <strong>Game Key:</strong> <code>{item.game_key}</code>
                   </p>
                 </>
               ) : (
-                <p>Game not found or has been removed</p>
+                <p className={styles.error}>
+                  Game not found or has been removed
+                </p>
               )}
             </div>
           ))}
