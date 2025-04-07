@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import GameFilter from "../GameFilter/index";
 import styles from "./GameCard.module.css";
-
 import { loadStripe } from "@stripe/stripe-js";
-const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function GameCard() {
   const [games, setGames] = useState([]);
@@ -19,7 +19,7 @@ function GameCard() {
     const fetchGames = async () => {
       let { data, error } = await supabase.from("game").select("*");
       if (error) {
-        console.error("Error loading games...", error);
+        alert("Error loading games...");
       } else {
         setGames(data);
         setFilteredGames(data);
@@ -47,6 +47,16 @@ function GameCard() {
     try {
       const stripe = await stripePromise;
 
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        alert("You need to be logged in to make a purchase.");
+        return;
+      }
+
       const response = await fetch(
         "http://localhost:5000/create-checkout-session",
         {
@@ -58,7 +68,7 @@ function GameCard() {
             title: game.title,
             price: game.price,
             game_id: game.id,
-            user_id: user_id,
+            user_id: user.id,
           }),
         }
       );
@@ -71,7 +81,6 @@ function GameCard() {
         alert("Something went wrong while creating checkout session");
       }
     } catch (error) {
-      console.error("Error during checkout:", error);
       alert("An error occurred during checkout. Please try again.");
     }
   };

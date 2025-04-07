@@ -21,8 +21,6 @@ function MyGames() {
         return;
       }
 
-      console.log("User ID:", user.id);
-
       const { data, error } = await supabase
         .from("copies")
         .select(
@@ -42,7 +40,6 @@ function MyGames() {
       if (error) {
         console.error("Error fetching games:", error);
       } else {
-        console.log("Fetched games:", data);
         setGamesWithKeys(data);
       }
 

@@ -31,10 +31,8 @@ app.post("/create-checkout-session", async (req, res) => {
         {
           price_data: {
             currency: "usd",
-            product_data: {
-              name: title,
-            },
-            unit_amount: price * 100,
+            product_data: { name: title },
+            unit_amount: Math.round(price * 100),
           },
           quantity: 1,
         },
@@ -76,13 +74,35 @@ app.post(
       const gameId = session.metadata.game_id;
       const userId = session.metadata.user_id;
 
-      await supabase
-        .from("copies")
-        .update({ user_id: userId })
-        .eq("game_id", gameId)
-        .is("user_id", null)
-        .limit(1)
-        .select();
+      try {
+        const { data: copies, error: selectError } = await supabase
+          .from("copies")
+          .select("copy_id")
+          .eq("game_id", gameId)
+          .is("user_id", null)
+          .limit(1);
+
+        if (selectError) {
+          return res.status(500).send("Error selecting copy");
+        }
+
+        if (!copies || copies.length === 0) {
+          return res.status(404).send("No free copies available");
+        }
+
+        const copyId = copies[0].copy_id;
+
+        const { error: updateError } = await supabase
+          .from("copies")
+          .update({ user_id: userId })
+          .eq("copy_id", copyId);
+
+        if (updateError) {
+          return res.status(500).send("Error updating copy");
+        }
+      } catch (e) {
+        return res.status(500).send("Unexpected server error");
+      }
     }
 
     res.json({ received: true });
