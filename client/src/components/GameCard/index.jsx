@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import GameFilter from "../GameFilter/index";
 import styles from "./GameCard.module.css";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function GameCard() {
   const [games, setGames] = useState([]);
@@ -18,9 +15,7 @@ function GameCard() {
   useEffect(() => {
     const fetchGames = async () => {
       let { data, error } = await supabase.from("game").select("*");
-      if (error) {
-        alert("Error loading games...");
-      } else {
+      if (!error) {
         setGames(data);
         setFilteredGames(data);
       }
@@ -45,8 +40,6 @@ function GameCard() {
 
   const handleBuy = async game => {
     try {
-      const stripe = await stripePromise;
-
       const {
         data: { user },
         error,
@@ -57,31 +50,28 @@ function GameCard() {
         return;
       }
 
-      const response = await fetch(
-        "http://localhost:5000/create-checkout-session",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: game.title,
-            price: game.price,
-            game_id: game.id,
-            user_id: user.id,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:5000/simulate-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          game_id: game.game_id,
+          user_id: user.id,
+        }),
+      });
 
-      const session = await response.json();
+      const result = await response.json();
 
-      if (session.url) {
-        window.location.href = session.url;
+      if (result.success) {
+        alert("Purchase successful!");
       } else {
-        alert("Something went wrong while creating checkout session");
+        alert("Failed to record purchase: " + result.error);
       }
     } catch (error) {
-      alert("An error occurred during checkout. Please try again.");
+      alert(
+        "An error occurred during the simulated payment. Please try again."
+      );
     }
   };
 
@@ -90,7 +80,7 @@ function GameCard() {
       <GameFilter onFilterChange={setFilters} />
       <section className={styles.gameList}>
         {filteredGames.map(game => (
-          <div key={game.id} className={styles.gameCard}>
+          <div key={game.game_id} className={styles.gameCard}>
             <img
               src={game.image}
               alt={game.title}
