@@ -3,11 +3,11 @@ import { supabase } from "../../supabaseClient";
 import styles from "./MyGames.module.css";
 
 function MyGames() {
-  const [purchasedGames, setPurchasedGames] = useState([]);
+  const [gamesWithKeys, setGamesWithKeys] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPurchasedGames = async () => {
+    const fetchMyGames = async () => {
       setLoading(true);
 
       const {
@@ -16,15 +16,17 @@ function MyGames() {
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
+        console.error("User is not authenticated:", userError);
         setLoading(false);
         return;
       }
 
       const { data, error } = await supabase
-        .from("purchases")
+        .from("copies")
         .select(
           `
-          purchase_date,
+          game_key,
+          user_id,
           game:game_id (
             title,
             image,
@@ -35,14 +37,16 @@ function MyGames() {
         )
         .eq("user_id", user.id);
 
-      if (!error) {
-        setPurchasedGames(data);
+      if (error) {
+        console.error("Error fetching games:", error);
+      } else {
+        setGamesWithKeys(data);
       }
 
       setLoading(false);
     };
 
-    fetchPurchasedGames();
+    fetchMyGames();
   }, []);
 
   return (
@@ -51,11 +55,11 @@ function MyGames() {
 
       {loading ? (
         <p>Loading...</p>
-      ) : purchasedGames.length === 0 ? (
+      ) : gamesWithKeys.length === 0 ? (
         <p>You don't have any purchased games yet.</p>
       ) : (
         <div className={styles.grid}>
-          {purchasedGames.map((item, index) => (
+          {gamesWithKeys.map((item, index) => (
             <div key={index} className={styles.card}>
               {item.game ? (
                 <>
@@ -70,8 +74,7 @@ function MyGames() {
                     <strong>Genre:</strong> {item.game.genre}
                   </p>
                   <p>
-                    <strong>Purchase Date:</strong>{" "}
-                    {new Date(item.purchase_date).toLocaleDateString()}
+                    <strong>Game Key:</strong> <code>{item.game_key}</code>
                   </p>
                 </>
               ) : (
