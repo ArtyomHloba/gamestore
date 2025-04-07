@@ -1,5 +1,5 @@
+import paymentValidationSchema from "../../validation/paymentValidation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { supabase } from "../../supabaseClient";
 import styles from "./PaymentForm.module.css";
 
@@ -9,21 +9,6 @@ function PaymentForm({ game, onPaymentSuccess }) {
     expiryDate: "",
     cvv: "",
   };
-
-  const validationSchema = Yup.object({
-    cardNumber: Yup.string()
-      .matches(/^\d{16}$/, "Card number must be 16 digits")
-      .required("Card number is required"),
-    expiryDate: Yup.string()
-      .matches(
-        /^(0[1-9]|1[0-2])\/\d{2}$/,
-        "Expiry date must be in MM/YY format"
-      )
-      .required("Expiry date is required"),
-    cvv: Yup.string()
-      .matches(/^\d{3}$/, "CVV must be 3 digits")
-      .required("CVV is required"),
-  });
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
@@ -66,58 +51,76 @@ function PaymentForm({ game, onPaymentSuccess }) {
   };
 
   return (
-    <div className={styles.paymentForm}>
-      <h2>Payment for {game.title}</h2>
-      <p>Price: ${game.price}</p>
+    <div className={styles.paymentFormContainer}>
+      <div className={styles.paymentTitle}>Payment for {game.title}</div>
+      <div className={styles.paymentPrice}>Price: ${game.price}</div>
 
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={paymentValidationSchema}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
           <Form>
             <div className={styles.formGroup}>
-              <label htmlFor="cardNumber">Card Number</label>
+              <label htmlFor="cardNumber" className={styles.formLabel}>
+                Card Number
+              </label>
               <Field
                 type="text"
                 id="cardNumber"
                 name="cardNumber"
                 placeholder="1234 5678 9012 3456"
+                className={styles.formInput}
               />
               <ErrorMessage
                 name="cardNumber"
                 component="div"
-                className={styles.error}
+                className={styles.errorMessage}
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="expiryDate">Expiry Date</label>
+              <label htmlFor="expiryDate" className={styles.formLabel}>
+                Expiry Date
+              </label>
               <Field
                 type="text"
                 id="expiryDate"
                 name="expiryDate"
                 placeholder="MM/YY"
+                className={styles.formInput}
               />
               <ErrorMessage
                 name="expiryDate"
                 component="div"
-                className={styles.error}
+                className={styles.errorMessage}
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="cvv">CVV</label>
-              <Field type="text" id="cvv" name="cvv" placeholder="123" />
+              <label htmlFor="cvv" className={styles.formLabel}>
+                CVV
+              </label>
+              <Field
+                type="text"
+                id="cvv"
+                name="cvv"
+                placeholder="123"
+                className={styles.formInput}
+              />
               <ErrorMessage
                 name="cvv"
                 component="div"
-                className={styles.error}
+                className={styles.errorMessage}
               />
             </div>
 
-            <button type="submit" disabled={isSubmitting}>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={styles.submitButton}
+            >
               {isSubmitting ? "Processing..." : "Pay Now"}
             </button>
           </Form>
