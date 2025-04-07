@@ -40,8 +40,8 @@ app.post("/create-checkout-session", async (req, res) => {
         },
       ],
       mode: "payment",
-      success_url: "http://localhost:3000/my-games?success=true",
-      cancel_url: "http://localhost:3000?canceled=true",
+      success_url: "http://localhost:5173/my-games?success=true",
+      cancel_url: "http://localhost:5173?canceled=true",
       metadata: {
         game_id,
         user_id,

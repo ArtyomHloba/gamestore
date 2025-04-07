@@ -4,7 +4,7 @@ import GameFilter from "../GameFilter/index";
 import styles from "./GameCard.module.css";
 
 import { loadStripe } from "@stripe/stripe-js";
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(process.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 function GameCard() {
   const [games, setGames] = useState([]);
@@ -44,28 +44,35 @@ function GameCard() {
   }, [filters, games]);
 
   const handleBuy = async game => {
-    const stripe = await stripePromise;
+    try {
+      const stripe = await stripePromise;
 
-    const response = await fetch(
-      "http://localhost:5000/create-checkout-session",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: game.title,
-          price: game.price,
-        }),
+      const response = await fetch(
+        "http://localhost:5000/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: game.title,
+            price: game.price,
+            game_id: game.id,
+            user_id: user_id,
+          }),
+        }
+      );
+
+      const session = await response.json();
+
+      if (session.url) {
+        window.location.href = session.url;
+      } else {
+        alert("Something went wrong while creating checkout session");
       }
-    );
-
-    const session = await response.json();
-
-    if (session.url) {
-      window.location.href = session.url;
-    } else {
-      alert("Something went wrong while creating checkout session");
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("An error occurred during checkout. Please try again.");
     }
   };
 
