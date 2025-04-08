@@ -33,6 +33,12 @@ function GameFilter({ onFilterChange }) {
           <option value="RPG">RPG</option>
           <option value="Strategy">Strategy</option>
           <option value="Shooter">Shooter</option>
+          <option value="Horror">Horror</option>
+          <option value="Sports">Sports</option>
+          <option value="Sandbox">Sandbox</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Simulator">Simulator</option>
+          <option value="Action-Adventure">Action-Adventure</option>
         </select>
 
         <input
