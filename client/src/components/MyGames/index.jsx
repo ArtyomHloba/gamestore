@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
+import ClipLoader from "react-spinners/ClipLoader";
 import styles from "./MyGames.module.css";
 
 function MyGames() {
@@ -54,7 +55,9 @@ function MyGames() {
       <h2 className={styles.title}>My Games</h2>
 
       {loading ? (
-        <p className={styles.loading}>Loading...</p>
+        <div className={styles.loaderContainer}>
+          <ClipLoader color="#f39c12" size={50} className={styles.loader} />
+        </div>
       ) : gamesWithKeys.length === 0 ? (
         <p className={styles.noGames}>
           You don't have any purchased games yet.

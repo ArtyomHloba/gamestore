@@ -74,3 +74,10 @@
 .buyButton:hover {
   background-color: #e67e22;
 }
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
