@@ -2,15 +2,15 @@ import { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import signUpValidationSchema from "../../validation/signUpValidation";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./SignUpPage.module.css";
 
 function SignUpPage() {
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
 
   const handleSignUp = async (values, { setSubmitting }) => {
     setError("");
-    setMessage("");
     try {
       const { data, error } = await supabase.auth.signUp({
         email: values.email,
@@ -35,8 +35,18 @@ function SignUpPage() {
         if (insertError) {
           setError(insertError.message);
         } else {
-          setMessage(
-            "🎉 Registration successful! Please check your email 📩 and confirm your account to get started."
+          toast.success(
+            "🎉Please check your email 📩 and confirm your account to get started.",
+            {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            }
           );
         }
       } else {
@@ -53,7 +63,6 @@ function SignUpPage() {
     <div className={styles.signUpForm}>
       <h2>Join Us Today 🚀</h2>
       {error && <p className={styles.error}>❌ {error}</p>}
-      {message && <p className={styles.success}>✅ {message}</p>}
       <Formik
         initialValues={{ userName: "", email: "", password: "" }}
         validationSchema={signUpValidationSchema}
