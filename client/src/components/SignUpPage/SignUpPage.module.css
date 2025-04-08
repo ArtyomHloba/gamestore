@@ -73,3 +73,9 @@ label {
 .Toastify__toast--error {
   border-left: 5px solid #e74c3c;
 }
+
+@media screen and (max-width: 800px) {
+  .signUpForm {
+    margin: 10px;
+  }
+}

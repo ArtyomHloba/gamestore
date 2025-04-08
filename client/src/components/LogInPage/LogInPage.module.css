@@ -65,3 +65,9 @@ label {
   align-items: center;
   height: 200px;
 }
+
+@media screen and (max-width: 800px) {
+  .logInForm {
+    margin: 10px;
+  }
+}
