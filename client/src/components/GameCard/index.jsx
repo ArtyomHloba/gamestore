@@ -48,7 +48,6 @@ function GameCard() {
 
   const handlePaymentSuccess = () => {
     setSelectedGame(null);
-    alert("Game purchased successfully!");
   };
 
   return (

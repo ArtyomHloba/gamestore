@@ -5,12 +5,13 @@ import GameCard from "./components/GameCard";
 import SignUpPage from "./components/SignUpPage";
 import LogInPage from "./components/LogInPage";
 import MyGames from "./components/MyGames";
-import GameSlider from "./components/GameSlider";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <Router>
       <Header />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<GameCard />} />
         <Route path="/signup" element={<SignUpPage />} />

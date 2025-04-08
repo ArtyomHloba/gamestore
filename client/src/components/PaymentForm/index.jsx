@@ -1,6 +1,8 @@
 import paymentValidationSchema from "../../validation/paymentValidation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { supabase } from "../../supabaseClient";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./PaymentForm.module.css";
 
 function PaymentForm({ game, onPaymentSuccess }) {
@@ -18,7 +20,9 @@ function PaymentForm({ game, onPaymentSuccess }) {
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        alert("You need to be logged in to make a purchase.");
+        toast.error("You need to be logged in to make a purchase.", {
+          position: "top-center",
+        });
         setSubmitting(false);
         return;
       }
@@ -37,14 +41,20 @@ function PaymentForm({ game, onPaymentSuccess }) {
       const result = await response.json();
 
       if (result.success) {
-        alert("Payment successful!");
+        toast.success("Payment successful! 🎉", {
+          position: "top-center",
+        });
         onPaymentSuccess();
         resetForm();
       } else {
-        alert("Failed to record purchase. Please try again.");
+        toast.error("Failed to record purchase. Please try again.", {
+          position: "top-center",
+        });
       }
     } catch (err) {
-      alert("An error occurred. Please try again later.");
+      toast.error("An error occurred. Please try again later.", {
+        position: "top-center",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -72,6 +82,7 @@ function PaymentForm({ game, onPaymentSuccess }) {
                 name="cardNumber"
                 placeholder="1234 5678 9012 3456"
                 className={styles.formInput}
+                maxLength="16"
               />
               <ErrorMessage
                 name="cardNumber"
@@ -90,6 +101,7 @@ function PaymentForm({ game, onPaymentSuccess }) {
                 name="expiryDate"
                 placeholder="MM/YY"
                 className={styles.formInput}
+                maxLength="5"
               />
               <ErrorMessage
                 name="expiryDate"
@@ -108,6 +120,7 @@ function PaymentForm({ game, onPaymentSuccess }) {
                 name="cvv"
                 placeholder="123"
                 className={styles.formInput}
+                maxLength="3"
               />
               <ErrorMessage
                 name="cvv"

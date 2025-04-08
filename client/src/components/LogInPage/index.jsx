@@ -56,7 +56,6 @@ function LogInPage() {
       } else if (data?.user) {
         setCurrentUser(data.user);
         await fetchUserData(data.user.email);
-        alert("You have successfully logged in!");
       }
     } catch (err) {
       setError("Failed to process request. Please try again later.");

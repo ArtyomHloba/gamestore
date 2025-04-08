@@ -84,3 +84,19 @@
 .submitButton:hover:not(:disabled) {
   background-color: #e67e22;
 }
+
+.Toastify__toast-container .Toastify__toast {
+  background-color: #262d35;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.Toastify__toast-container .Toastify__toast--success {
+  border-left: 5px solid #10b981;
+}
+
+.Toastify__toast-container .Toastify__toast--error {
+  border-left: 5px solid #e74c3c;
+}
