@@ -24,7 +24,7 @@ function Header() {
         <Link to="/" className={styles.logo}>
           <IoGameControllerOutline />
         </Link>
-        <p>Game Store</p>
+        <p className={styles.gameStore}>Game Store</p>
       </div>
 
       <div className={styles.signUpContainer}>

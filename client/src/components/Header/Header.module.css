@@ -1,4 +1,4 @@
-p {
+.gameStore {
   font-size: 25px;
   color: white;
 }
@@ -66,4 +66,10 @@ p {
 .signUpBtn:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+@media screen and (max-width: 800px) {
+  .gameStore {
+    display: none;
+  }
 }
