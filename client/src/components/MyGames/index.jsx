@@ -7,11 +7,12 @@ import ReceiptPDF from "../ReceiptPDF";
 
 function MyGames() {
   const [gamesWithKeys, setGamesWithKeys] = useState([]);
+  const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleKeys, setVisibleKeys] = useState({});
 
   useEffect(() => {
-    const fetchMyGames = async () => {
+    const fetchMyGamesAndPurchases = async () => {
       setLoading(true);
 
       const {
@@ -25,33 +26,59 @@ function MyGames() {
         return;
       }
 
-      const { data, error } = await supabase
-        .from("copies")
-        .select(
+      try {
+        const { data: copiesData, error: copiesError } = await supabase
+          .from("copies")
+          .select(
+            `
+            game_key,
+            user_id,
+            game:game_id (
+              title,
+              image
+            )
           `
-          game_key,
-          user_id,
-          game:game_id (
-            title,
-            image,
-            genre,
-            description,
-            price
           )
-        `
-        )
-        .eq("user_id", user.id);
+          .eq("user_id", user.id);
 
-      if (error) {
-        console.error("Error fetching games:", error);
-      } else {
-        setGamesWithKeys(data);
+        if (copiesError) {
+          console.error("Error fetching copies:", copiesError);
+        } else {
+          setGamesWithKeys(copiesData);
+        }
+
+        const { data: purchasesData, error: purchasesError } = await supabase
+          .from("purchases")
+          .select(
+            `
+            purchase_id,
+            purchase_date,
+            game:game_id (
+              title,
+              genre,
+              price
+            ),
+            user:user_id (
+              user_name,
+              email
+            )
+          `
+          )
+          .eq("user_id", user.id);
+
+        if (purchasesError) {
+          console.error("Error fetching purchases:", purchasesError);
+        } else {
+          setPurchases(purchasesData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
-    fetchMyGames();
+    fetchMyGamesAndPurchases();
   }, []);
 
   const toggleKeyVisibility = index => {
@@ -75,48 +102,56 @@ function MyGames() {
         </p>
       ) : (
         <div className={styles.grid}>
-          {gamesWithKeys.map((item, index) => (
-            <div key={index} className={styles.card}>
-              {item.game ? (
-                <>
-                  <img
-                    src={item.game.image}
-                    alt={item.game.title}
-                    className={styles.image}
-                  />
-                  <h3 className={styles.gameTitle}>{item.game.title}</h3>
-                  <p className={styles.description}>{item.game.description}</p>
-                  <p className={styles.genre}>Genre: {item.game.genre}</p>
-                  <p className={styles.price}>Price: ${item.game.price}</p>
-                  <p className={styles.gameKey}>
-                    Game Key:{" "}
-                    {visibleKeys[index] ? (
-                      <>
-                        <code>{item.game_key}</code>
-                        <FaEyeSlash
-                          className={styles.eyeIcon}
-                          onClick={() => toggleKeyVisibility(index)}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <span>••••••••••••••••</span>
-                        <FaEye
-                          className={styles.eyeIcon}
-                          onClick={() => toggleKeyVisibility(index)}
-                        />
-                      </>
+          {gamesWithKeys.map((item, index) => {
+            const purchase = purchases.find(
+              purchase => purchase.game.title === item.game.title
+            );
+
+            return (
+              <div key={index} className={styles.card}>
+                {item.game ? (
+                  <>
+                    <img
+                      src={item.game.image}
+                      alt={item.game.title}
+                      className={styles.image}
+                    />
+                    <h3 className={styles.gameTitle}>{item.game.title}</h3>
+                    <p className={styles.gameKey}>
+                      Game Key:{" "}
+                      {visibleKeys[index] ? (
+                        <>
+                          <code>{item.game_key}</code>
+                          <FaEyeSlash
+                            className={styles.eyeIcon}
+                            onClick={() => toggleKeyVisibility(index)}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <span>••••••••••••••••</span>
+                          <FaEye
+                            className={styles.eyeIcon}
+                            onClick={() => toggleKeyVisibility(index)}
+                          />
+                        </>
+                      )}
+                    </p>
+                    {purchase && (
+                      <ReceiptPDF
+                        purchaseId={purchase.purchase_id}
+                        purchase={purchase}
+                      />
                     )}
+                  </>
+                ) : (
+                  <p className={styles.error}>
+                    Game not found or has been removed
                   </p>
-                  <ReceiptPDF game={item.game} />
-                </>
-              ) : (
-                <p className={styles.error}>
-                  Game not found or has been removed
-                </p>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
