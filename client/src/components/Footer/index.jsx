@@ -23,7 +23,6 @@ function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        <h3 className={styles.title}>Contact Us</h3>
         <ul className={styles.contactList}>
           {contactInfo.map((item, index) => (
             <li key={index} className={styles.contactItem}>

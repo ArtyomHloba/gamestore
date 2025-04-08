@@ -1,7 +1,7 @@
 .footer {
   background-color: #262d35;
   color: #fff;
-  padding: 20px 0;
+  padding: 10px 0;
   text-align: center;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
   margin-top: auto;
@@ -11,13 +11,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-}
-
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #f39c12;
-  margin-bottom: 15px;
 }
 
 .contactList {
@@ -33,11 +26,11 @@
 .contactItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .icon {
-  font-size: 20px;
+  font-size: 16px;
   color: #f39c12;
 }
 
@@ -57,7 +50,7 @@
 }
 
 .copyright {
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 14px;
   color: #999;
 }
