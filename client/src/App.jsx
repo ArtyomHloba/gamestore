@@ -5,6 +5,7 @@ import GameCard from "./components/GameCard";
 import SignUpPage from "./components/SignUpPage";
 import LogInPage from "./components/LogInPage";
 import MyGames from "./components/MyGames";
+import GameSlider from "./components/GameSlider";
 
 function App() {
   return (
