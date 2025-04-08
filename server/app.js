@@ -15,19 +15,26 @@ app.use(express.json());
 app.post("/simulate-payment", async (req, res) => {
   const { game_id, user_id } = req.body;
 
-  console.log("Simulating payment for:", { game_id, user_id });
-
   if (!game_id || !user_id) {
     return res.status(400).json({ error: "Missing game_id or user_id" });
   }
 
   try {
+    const { data: user, error: userError } = await supabase
+      .from("user")
+      .select("*")
+      .eq("user_id", user_id)
+      .single();
+
+    if (userError || !user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     const { error: purchaseError } = await supabase
       .from("purchases")
       .insert([{ user_id, game_id }]);
 
     if (purchaseError) {
-      console.error("Error inserting purchase:", purchaseError);
       return res.status(500).json({ error: "Failed to record purchase" });
     }
 
@@ -40,7 +47,6 @@ app.post("/simulate-payment", async (req, res) => {
       .single();
 
     if (copyError || !availableCopy) {
-      console.error("Error finding available copy:", copyError);
       return res.status(500).json({ error: "No available copies found" });
     }
 
@@ -50,14 +56,11 @@ app.post("/simulate-payment", async (req, res) => {
       .eq("copy_id", availableCopy.copy_id);
 
     if (updateCopyError) {
-      console.error("Error updating copy:", updateCopyError);
       return res.status(500).json({ error: "Failed to update game copy" });
     }
 
-    console.log(`Purchase and copy update successful for user ${user_id}`);
     res.json({ success: true, message: "Purchase and copy update successful" });
   } catch (e) {
-    console.error("Unexpected server error:", e);
     res.status(500).json({ error: "Unexpected server error" });
   }
 });
