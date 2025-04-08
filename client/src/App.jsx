@@ -6,18 +6,22 @@ import SignUpPage from "./components/SignUpPage";
 import LogInPage from "./components/LogInPage";
 import MyGames from "./components/MyGames";
 import { ToastContainer } from "react-toastify";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <Router>
       <Header />
       <ToastContainer />
-      <Routes>
-        <Route path="/" element={<GameCard />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/login" element={<LogInPage />} />
-        <Route path="/my-games" element={<MyGames />} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path="/" element={<GameCard />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/login" element={<LogInPage />} />
+          <Route path="/my-games" element={<MyGames />} />
+        </Routes>
+      </main>
+      <Footer />
     </Router>
   );
 }

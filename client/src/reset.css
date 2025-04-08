@@ -120,7 +120,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
+  content: "";
   content: none;
 }
 table {
@@ -137,5 +137,15 @@ table {
 body {
   font-size: 1rem;
   background-color: #45505a;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
+
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
 }
