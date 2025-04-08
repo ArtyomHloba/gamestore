@@ -3,6 +3,7 @@ import { supabase } from "../../supabaseClient";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styles from "./MyGames.module.css";
+import ReceiptPDF from "../ReceiptPDF";
 
 function MyGames() {
   const [gamesWithKeys, setGamesWithKeys] = useState([]);
@@ -34,7 +35,8 @@ function MyGames() {
             title,
             image,
             genre,
-            description
+            description,
+            price
           )
         `
         )
@@ -85,6 +87,7 @@ function MyGames() {
                   <h3 className={styles.gameTitle}>{item.game.title}</h3>
                   <p className={styles.description}>{item.game.description}</p>
                   <p className={styles.genre}>Genre: {item.game.genre}</p>
+                  <p className={styles.price}>Price: ${item.game.price}</p>
                   <p className={styles.gameKey}>
                     Game Key:{" "}
                     {visibleKeys[index] ? (
@@ -105,6 +108,7 @@ function MyGames() {
                       </>
                     )}
                   </p>
+                  <ReceiptPDF game={item.game} />
                 </>
               ) : (
                 <p className={styles.error}>
