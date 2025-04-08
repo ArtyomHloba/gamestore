@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import ClipLoader from "react-spinners/ClipLoader";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styles from "./MyGames.module.css";
 
 function MyGames() {
   const [gamesWithKeys, setGamesWithKeys] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleKeys, setVisibleKeys] = useState({});
 
   useEffect(() => {
     const fetchMyGames = async () => {
@@ -50,6 +52,13 @@ function MyGames() {
     fetchMyGames();
   }, []);
 
+  const toggleKeyVisibility = index => {
+    setVisibleKeys(prevState => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
+
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>My Games</h2>
@@ -75,11 +84,26 @@ function MyGames() {
                   />
                   <h3 className={styles.gameTitle}>{item.game.title}</h3>
                   <p className={styles.description}>{item.game.description}</p>
-                  <p className={styles.genre}>
-                    <strong>Genre:</strong> {item.game.genre}
-                  </p>
+                  <p className={styles.genre}>Genre: {item.game.genre}</p>
                   <p className={styles.gameKey}>
-                    <strong>Game Key:</strong> <code>{item.game_key}</code>
+                    Game Key:{" "}
+                    {visibleKeys[index] ? (
+                      <>
+                        <code>{item.game_key}</code>
+                        <FaEyeSlash
+                          className={styles.eyeIcon}
+                          onClick={() => toggleKeyVisibility(index)}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <span>••••••••••••••••</span>
+                        <FaEye
+                          className={styles.eyeIcon}
+                          onClick={() => toggleKeyVisibility(index)}
+                        />
+                      </>
+                    )}
                   </p>
                 </>
               ) : (
