@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import MyGameCard from "../MyGameCard";
 import styles from "./MyGames.module.css";
-import ReceiptPDF from "../ReceiptPDF";
 
 function MyGames() {
   const [gamesWithKeys, setGamesWithKeys] = useState([]);
@@ -108,48 +107,14 @@ function MyGames() {
             );
 
             return (
-              <div key={index} className={styles.card}>
-                {item.game ? (
-                  <>
-                    <img
-                      src={item.game.image}
-                      alt={item.game.title}
-                      className={styles.image}
-                    />
-                    <h3 className={styles.gameTitle}>{item.game.title}</h3>
-                    <p className={styles.gameKey}>
-                      Game Key:{" "}
-                      {visibleKeys[index] ? (
-                        <>
-                          <code>{item.game_key}</code>
-                          <FaEyeSlash
-                            className={styles.eyeIcon}
-                            onClick={() => toggleKeyVisibility(index)}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <span>••••••••••••••••</span>
-                          <FaEye
-                            className={styles.eyeIcon}
-                            onClick={() => toggleKeyVisibility(index)}
-                          />
-                        </>
-                      )}
-                    </p>
-                    {purchase && (
-                      <ReceiptPDF
-                        purchaseId={purchase.purchase_id}
-                        purchase={purchase}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <p className={styles.error}>
-                    Game not found or has been removed
-                  </p>
-                )}
-              </div>
+              <MyGameCard
+                key={index}
+                game={item.game}
+                gameKey={item.game_key}
+                purchase={purchase}
+                visible={visibleKeys[index]}
+                onToggleVisibility={() => toggleKeyVisibility(index)}
+              />
             );
           })}
         </div>
