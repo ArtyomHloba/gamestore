@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
-import { supabase } from "../../supabaseClient";
+import { fetchPurchaseById } from "../../api";
 
 function ReceiptPDF({ purchaseId }) {
   const [purchaseData, setPurchaseData] = useState(null);
@@ -9,34 +9,10 @@ function ReceiptPDF({ purchaseId }) {
   useEffect(() => {
     const fetchPurchaseData = async () => {
       try {
-        const { data, error } = await supabase
-          .from("purchases")
-          .select(
-            `
-            purchase_id,
-            purchase_date,
-            game:game_id (
-              title,
-              image,
-              genre,
-              price
-            ),
-            user:user_id (
-              user_name,
-              email
-            )
-          `
-          )
-          .eq("purchase_id", purchaseId)
-          .single();
-
-        if (!error) {
-          setPurchaseData(data);
-        } else {
-          console.error("Failed to fetch purchase data:", error);
-        }
+        const data = await fetchPurchaseById(purchaseId);
+        setPurchaseData(data);
       } catch (error) {
-        console.error("Error fetching purchase data:", error);
+        console.error("Failed to fetch purchase data:", error);
       } finally {
         setLoading(false);
       }

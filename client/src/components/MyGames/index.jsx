@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import ClipLoader from "react-spinners/ClipLoader";
 import MyGameCard from "../MyGameCard";
+import { fetchCopies, fetchPurchases } from "../../api";
 import styles from "./MyGames.module.css";
 
 function MyGames() {
@@ -26,50 +27,11 @@ function MyGames() {
       }
 
       try {
-        const { data: copiesData, error: copiesError } = await supabase
-          .from("copies")
-          .select(
-            `
-            game_key,
-            user_id,
-            game:game_id (
-              title,
-              image
-            )
-          `
-          )
-          .eq("user_id", user.id);
+        const copiesData = await fetchCopies(user.id);
+        setGamesWithKeys(copiesData);
 
-        if (copiesError) {
-          console.error("Error fetching copies:", copiesError);
-        } else {
-          setGamesWithKeys(copiesData);
-        }
-
-        const { data: purchasesData, error: purchasesError } = await supabase
-          .from("purchases")
-          .select(
-            `
-            purchase_id,
-            purchase_date,
-            game:game_id (
-              title,
-              genre,
-              price
-            ),
-            user:user_id (
-              user_name,
-              email
-            )
-          `
-          )
-          .eq("user_id", user.id);
-
-        if (purchasesError) {
-          console.error("Error fetching purchases:", purchasesError);
-        } else {
-          setPurchases(purchasesData);
-        }
+        const purchasesData = await fetchPurchases(user.id);
+        setPurchases(purchasesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
