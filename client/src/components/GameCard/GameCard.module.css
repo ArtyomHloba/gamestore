@@ -70,7 +70,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .buyButton:hover {
@@ -82,4 +82,12 @@
   justify-content: center;
   align-items: center;
   height: 200px;
+}
+
+.wishlistIcon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 20px;
+  padding-left: 12px;
 }

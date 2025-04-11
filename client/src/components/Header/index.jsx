@@ -30,9 +30,7 @@ function Header() {
 
       <div className={styles.signUpContainer}>
         <Link to="/wishlist">
-          <button className={styles.wishlistButton}>
-            <FaHeart color="red" /> Wishlist
-          </button>
+          <FaHeart color="red" className={styles.wishlistButton} />
         </Link>
         <Link to="/my-games">
           <button className={styles.loginBtn}>Profile</button>

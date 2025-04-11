@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { fetchWishlist } from "../../api";
 import PaymentForm from "../PaymentForm";
+import ClipLoader from "react-spinners/ClipLoader";
 import styles from "./Wishlist.module.css";
 
 function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadWishlist = async () => {
+      setLoading(true);
       const {
         data: { user },
         error: userError,
@@ -17,11 +20,13 @@ function Wishlist() {
 
       if (userError || !user) {
         console.error("User is not authenticated:", userError);
+        setLoading(false);
         return;
       }
 
       const wishlistData = await fetchWishlist(user.id);
       setWishlist(wishlistData);
+      setLoading(false);
     };
 
     loadWishlist();
@@ -33,14 +38,18 @@ function Wishlist() {
 
   return (
     <div className={styles.wishlistContainer}>
-      <h2>Your Wishlist</h2>
-      {selectedGame ? (
+      <h2 className={styles.title}>Your Wishlist</h2>
+      {loading ? (
+        <div className={styles.loaderContainer}>
+          <ClipLoader color="#f39c12" size={50} />
+        </div>
+      ) : selectedGame ? (
         <PaymentForm
           game={selectedGame}
           onPaymentSuccess={handlePaymentSuccess}
         />
       ) : wishlist.length === 0 ? (
-        <p>Your wishlist is empty.</p>
+        <p className={styles.noWishListGames}>Your wishlist is empty.</p>
       ) : (
         <div className={styles.wishlistGrid}>
           {wishlist.map(game => (

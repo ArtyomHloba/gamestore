@@ -68,6 +68,10 @@
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
+.wishlistButton {
+  font-size: 30px;
+}
+
 @media screen and (max-width: 800px) {
   .gameStore {
     display: none;

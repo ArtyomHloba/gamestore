@@ -4,6 +4,14 @@
   margin: 0 auto;
 }
 
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
 .wishlistGrid {
   display: flex;
   flex-wrap: wrap;
@@ -54,7 +62,6 @@
 .wishlistItem .price {
   font-size: 1rem;
   font-weight: bold;
-  color: #27ae60;
   margin: 5px 10px;
 }
 
@@ -62,6 +69,12 @@
   font-size: 0.8rem;
   margin: 0 10px 5px;
   color: #b2bec3;
+}
+
+.noWishListGames {
+  font-size: 18px;
+  text-align: center;
+  color: #999;
 }
 
 .buyButton {
@@ -74,7 +87,6 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px;
 }
 
 .buyButton:hover {

@@ -75,6 +75,26 @@ function GameCard() {
     handleWishlistUpdate();
   }, []);
 
+  const toggleWishlist = async game => {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      alert("You need to be logged in to add to wishlist.");
+      return;
+    }
+
+    if (wishlist.includes(game.game_id)) {
+      await removeFromWishlist(user.id, game.game_id);
+      setWishlist(wishlist.filter(id => id !== game.game_id));
+    } else {
+      await addToWishlist(user.id, game.game_id);
+      setWishlist([...wishlist, game.game_id]);
+    }
+  };
+
   return (
     <div>
       {selectedGame ? (
@@ -102,39 +122,21 @@ function GameCard() {
                   <p className={styles.genre}>{game.genre}</p>
                   <p>{game.description}</p>
                   <p className={styles.price}>${game.price}</p>
-                  <button
-                    className={styles.buyButton}
-                    onClick={() => setSelectedGame(game)}
-                  >
-                    Buy
-                  </button>
-                  <button
-                    className={styles.wishlistButton}
-                    onClick={async () => {
-                      const {
-                        data: { user },
-                        error: userError,
-                      } = await supabase.auth.getUser();
-
-                      if (userError || !user) {
-                        alert("You need to be logged in to add to wishlist.");
-                        return;
-                      }
-
-                      if (wishlist.includes(game.game_id)) {
-                        await removeFromWishlist(user.id, game.game_id);
-                        setWishlist(wishlist.filter(id => id !== game.game_id));
-                      } else {
-                        await addToWishlist(user.id, game.game_id);
-                        setWishlist([...wishlist, game.game_id]);
-                      }
-                    }}
+                  <div
+                    className={styles.wishlistIcon}
+                    onClick={() => toggleWishlist(game)}
                   >
                     {wishlist.includes(game.game_id) ? (
                       <FaHeart color="red" />
                     ) : (
                       <FaRegHeart />
                     )}
+                  </div>
+                  <button
+                    className={styles.buyButton}
+                    onClick={() => setSelectedGame(game)}
+                  >
+                    Buy
                   </button>
                 </div>
               ))}
