@@ -70,6 +70,7 @@
 
 .wishlistButton {
   font-size: 30px;
+  color: #e67e22;
 }
 
 @media screen and (max-width: 800px) {
