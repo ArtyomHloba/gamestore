@@ -2,6 +2,7 @@ import { IoGameControllerOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
+import { FaHeart } from "react-icons/fa";
 import styles from "./Header.module.css";
 
 function Header() {
@@ -28,6 +29,11 @@ function Header() {
       </div>
 
       <div className={styles.signUpContainer}>
+        <Link to="/wishlist">
+          <button className={styles.wishlistButton}>
+            <FaHeart color="red" /> Wishlist
+          </button>
+        </Link>
         <Link to="/my-games">
           <button className={styles.loginBtn}>Profile</button>
         </Link>

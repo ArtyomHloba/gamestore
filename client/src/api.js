@@ -80,3 +80,54 @@ export const fetchPurchaseById = async purchaseId => {
 
   return data;
 };
+
+export const fetchWishlist = async userId => {
+  const { data, error } = await supabase
+    .from("wishlist")
+    .select(
+      `
+      game:game_id (
+        game_id,
+        title,
+        image,
+        genre,
+        price
+      )
+    `
+    )
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error fetching wishlist:", error);
+    throw error;
+  }
+
+  return data.map(item => item.game);
+};
+
+export const addToWishlist = async (userId, gameId) => {
+  const { error } = await supabase.from("wishlist").insert([
+    {
+      user_id: userId,
+      game_id: gameId,
+    },
+  ]);
+
+  if (error) {
+    console.error("Error adding to wishlist:", error);
+    throw error;
+  }
+};
+
+export const removeFromWishlist = async (userId, gameId) => {
+  const { error } = await supabase
+    .from("wishlist")
+    .delete()
+    .eq("user_id", userId)
+    .eq("game_id", gameId);
+
+  if (error) {
+    console.error("Error removing from wishlist:", error);
+    throw error;
+  }
+};

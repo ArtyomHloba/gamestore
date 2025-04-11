@@ -5,6 +5,7 @@ import GameCard from "./components/GameCard";
 import SignUpPage from "./components/SignUpPage";
 import LogInPage from "./components/LogInPage";
 import MyGames from "./components/MyGames";
+import Wishlist from "./components/Wishlist";
 import { ToastContainer } from "react-toastify";
 import Footer from "./components/Footer";
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LogInPage />} />
           <Route path="/my-games" element={<MyGames />} />
+          <Route path="/wishlist" element={<Wishlist />} />
         </Routes>
       </main>
       <Footer />

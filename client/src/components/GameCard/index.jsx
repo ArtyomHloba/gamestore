@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
+import { addToWishlist, removeFromWishlist } from "../../api";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import GameFilter from "../GameFilter/index";
 import PaymentForm from "../PaymentForm";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -15,6 +17,7 @@ function GameCard() {
   });
   const [selectedGame, setSelectedGame] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -50,6 +53,28 @@ function GameCard() {
     setSelectedGame(null);
   };
 
+  const handleWishlistUpdate = async () => {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (!userError && user) {
+      const { data: wishlistData, error: wishlistError } = await supabase
+        .from("wishlist")
+        .select("*")
+        .eq("user_id", user.id);
+
+      if (!wishlistError) {
+        setWishlist(wishlistData.map(item => item.game_id));
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleWishlistUpdate();
+  }, []);
+
   return (
     <div>
       {selectedGame ? (
@@ -82,6 +107,34 @@ function GameCard() {
                     onClick={() => setSelectedGame(game)}
                   >
                     Buy
+                  </button>
+                  <button
+                    className={styles.wishlistButton}
+                    onClick={async () => {
+                      const {
+                        data: { user },
+                        error: userError,
+                      } = await supabase.auth.getUser();
+
+                      if (userError || !user) {
+                        alert("You need to be logged in to add to wishlist.");
+                        return;
+                      }
+
+                      if (wishlist.includes(game.game_id)) {
+                        await removeFromWishlist(user.id, game.game_id);
+                        setWishlist(wishlist.filter(id => id !== game.game_id));
+                      } else {
+                        await addToWishlist(user.id, game.game_id);
+                        setWishlist([...wishlist, game.game_id]);
+                      }
+                    }}
+                  >
+                    {wishlist.includes(game.game_id) ? (
+                      <FaHeart color="red" />
+                    ) : (
+                      <FaRegHeart />
+                    )}
                   </button>
                 </div>
               ))}
