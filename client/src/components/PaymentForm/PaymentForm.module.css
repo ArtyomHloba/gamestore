@@ -50,6 +50,8 @@
   color: #fff;
   outline: none;
   transition: border-color 0.3s ease;
+  flex: 1;
+  padding-right: 40px;
 }
 
 .formInput:focus {
@@ -99,4 +101,18 @@
 
 .Toastify__toast-container .Toastify__toast--error {
   border-left: 5px solid #e74c3c;
+}
+
+.inputWithIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cardIcon,
+.icon {
+  position: absolute;
+  right: 10px;
+  font-size: 1.5rem;
+  color: #f39c12;
 }

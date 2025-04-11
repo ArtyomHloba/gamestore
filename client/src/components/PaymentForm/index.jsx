@@ -3,6 +3,12 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { supabase } from "../../supabaseClient";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  FaCalendarAlt,
+  FaCreditCard,
+  FaCcVisa,
+  FaCcMastercard,
+} from "react-icons/fa";
 import styles from "./PaymentForm.module.css";
 
 function PaymentForm({ game, onPaymentSuccess }) {
@@ -60,6 +66,15 @@ function PaymentForm({ game, onPaymentSuccess }) {
     }
   };
 
+  const getCardIcon = cardNumber => {
+    if (cardNumber.startsWith("4")) {
+      return <FaCcVisa className={styles.cardIcon} />;
+    } else if (cardNumber.startsWith("5")) {
+      return <FaCcMastercard className={styles.cardIcon} />;
+    }
+    return null;
+  };
+
   return (
     <div className={styles.paymentFormContainer}>
       <div className={styles.paymentTitle}>Payment for {game.title}</div>
@@ -70,20 +85,23 @@ function PaymentForm({ game, onPaymentSuccess }) {
         validationSchema={paymentValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values }) => (
           <Form>
             <div className={styles.formGroup}>
               <label htmlFor="cardNumber" className={styles.formLabel}>
                 Card Number
               </label>
-              <Field
-                type="text"
-                id="cardNumber"
-                name="cardNumber"
-                placeholder="1234 5678 9012 3456"
-                className={styles.formInput}
-                maxLength="16"
-              />
+              <div className={styles.inputWithIcon}>
+                <Field
+                  type="text"
+                  id="cardNumber"
+                  name="cardNumber"
+                  placeholder="1234 5678 9012 3456"
+                  className={styles.formInput}
+                  maxLength="16"
+                />
+                {getCardIcon(values.cardNumber)}
+              </div>
               <ErrorMessage
                 name="cardNumber"
                 component="div"
@@ -95,14 +113,17 @@ function PaymentForm({ game, onPaymentSuccess }) {
               <label htmlFor="expiryDate" className={styles.formLabel}>
                 Expiry Date
               </label>
-              <Field
-                type="text"
-                id="expiryDate"
-                name="expiryDate"
-                placeholder="MM/YY"
-                className={styles.formInput}
-                maxLength="5"
-              />
+              <div className={styles.inputWithIcon}>
+                <Field
+                  type="text"
+                  id="expiryDate"
+                  name="expiryDate"
+                  placeholder="MM/YY"
+                  className={styles.formInput}
+                  maxLength="5"
+                />
+                <FaCalendarAlt className={styles.icon} />
+              </div>
               <ErrorMessage
                 name="expiryDate"
                 component="div"
@@ -114,14 +135,17 @@ function PaymentForm({ game, onPaymentSuccess }) {
               <label htmlFor="cvv" className={styles.formLabel}>
                 CVV
               </label>
-              <Field
-                type="text"
-                id="cvv"
-                name="cvv"
-                placeholder="123"
-                className={styles.formInput}
-                maxLength="3"
-              />
+              <div className={styles.inputWithIcon}>
+                <Field
+                  type="text"
+                  id="cvv"
+                  name="cvv"
+                  placeholder="123"
+                  className={styles.formInput}
+                  maxLength="3"
+                />
+                <FaCreditCard className={styles.icon} />
+              </div>
               <ErrorMessage
                 name="cvv"
                 component="div"
