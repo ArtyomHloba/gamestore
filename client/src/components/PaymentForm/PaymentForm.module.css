@@ -15,7 +15,7 @@
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 15px;
-  color: #f39c12;
+  color: #179cff;
   text-align: center;
 }
 
@@ -36,7 +36,7 @@
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 8px;
-  color: #f39c12;
+  color: #179cff;
 }
 
 .formInput {
@@ -55,7 +55,7 @@
 }
 
 .formInput:focus {
-  border-color: #f39c12;
+  border-color: #179cff;
 }
 
 .errorMessage {
@@ -71,7 +71,7 @@
   font-size: 18px;
   font-weight: bold;
   color: #fff;
-  background-color: #f39c12;
+  background-color: #179cff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -84,7 +84,7 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background-color: #e67e22;
+  background-color: #179cff;
 }
 
 .Toastify__toast-container .Toastify__toast {
@@ -114,5 +114,5 @@
   position: absolute;
   right: 10px;
   font-size: 1.5rem;
-  color: #f39c12;
+  color: #179cff;
 }

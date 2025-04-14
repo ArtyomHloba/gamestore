@@ -92,13 +92,17 @@ function ReceiptPDF({ purchaseId }) {
 const styles = {
   button: {
     padding: "10px 20px",
-    backgroundColor: "#f39c12",
+    background: "linear-gradient(90deg, #00c6ff, #0072ff)",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
     fontSize: "16px",
     marginTop: "10px",
+    transition: "background 0.3s ease",
+  },
+  buttonHover: {
+    background: "linear-gradient(90deg, #0072ff, #00c6ff)",
   },
 };
 

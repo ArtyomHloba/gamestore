@@ -2,7 +2,7 @@ import { IoGameControllerOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaUser, FaSignInAlt, FaUserPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import styles from "./Header.module.css";
 
@@ -39,24 +39,57 @@ function Header() {
       </div>
 
       <div className={styles.signUpContainer}>
-        <Link to="/wishlist">
+        {/* Wishlist */}
+        <Link to="/wishlist" className={styles.navItem}>
           <motion.div
-            whileHover={{ scale: 1.2, rotate: 10 }}
-            whileTap={{ scale: 0.9, rotate: -10 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300 }}
+            className={styles.navLink}
           >
-            <FaHeart color="red" className={styles.wishlistButton} />
+            <FaHeart className={styles.icon} />
+            <span>Wishlist</span>
           </motion.div>
         </Link>
-        <Link to="/my-games">
-          <button className={styles.loginBtn}>Profile</button>
+
+        {/* Profile */}
+        <Link to="/my-games" className={styles.navItem}>
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={styles.navLink}
+          >
+            <FaUser className={styles.icon} />
+            <span>Profile</span>
+          </motion.div>
         </Link>
-        <Link to="/login">
-          <button className={styles.loginBtn}>Login</button>
+
+        {/* Login */}
+        <Link to="/login" className={styles.navItem}>
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={styles.navLink}
+          >
+            <FaSignInAlt className={styles.icon} />
+            <span>Login</span>
+          </motion.div>
         </Link>
+
+        {/* Sign up */}
         {!isLoggedIn && (
-          <Link to="/signup">
-            <button className={styles.signUpBtn}>Sign up</button>
+          <Link to="/signup" className={styles.navItem}>
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className={styles.navLink}
+            >
+              <FaUserPlus className={styles.icon} />
+              <span>Sign up</span>
+            </motion.div>
           </Link>
         )}
       </div>

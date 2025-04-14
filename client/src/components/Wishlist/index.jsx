@@ -41,7 +41,7 @@ function Wishlist() {
       <h2 className={styles.title}>Your Wishlist</h2>
       {loading ? (
         <div className={styles.loaderContainer}>
-          <ClipLoader color="#f39c12" size={50} />
+          <ClipLoader color="#179CFF" size={50} />
         </div>
       ) : selectedGame ? (
         <PaymentForm

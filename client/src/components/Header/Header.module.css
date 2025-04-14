@@ -24,7 +24,7 @@
 }
 
 .logo:hover {
-  color: #f39c12;
+  color: #179cff;
 }
 
 .signUpContainer {
@@ -34,7 +34,7 @@
 
 .loginBtn,
 .signUpBtn {
-  background-color: #f39c12;
+  background-color: #179cff;
   border: 1px solid #444;
   color: #fff;
   font-size: 14px;
@@ -50,7 +50,7 @@
 
 .loginBtn:hover,
 .signUpBtn:hover {
-  background-color: #e67e22;
+  background-color: #179cff;
   border-color: #666;
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
@@ -70,7 +70,36 @@
 
 .wishlistButton {
   font-size: 30px;
-  color: #e67e22;
+  color: #179cff;
+}
+
+.icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.navItem {
+  text-decoration: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.navItem:hover {
+  color: #0072ff;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+span {
+  font-size: 16px;
+  font-weight: 500;
 }
 
 @media screen and (max-width: 800px) {

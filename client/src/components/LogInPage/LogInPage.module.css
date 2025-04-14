@@ -10,7 +10,7 @@
 
 h2 {
   text-align: center;
-  color: #f39c12;
+  color: #179cff;
   font-size: 2rem;
   margin-bottom: 20px;
 }
@@ -33,13 +33,13 @@ label {
 }
 
 .inputField:focus {
-  border-color: #f39c12;
+  border-color: #179cff;
 }
 
 .logOutBtn {
   width: 100%;
   padding: 14px;
-  background-color: #f39c12;
+  background-color: #179cff;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -50,7 +50,7 @@ label {
 }
 
 .logOutBtn:hover {
-  background-color: #e67e22;
+  background-color: #179cff;
 }
 
 .errorValid {

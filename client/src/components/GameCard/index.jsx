@@ -107,7 +107,7 @@ function GameCard() {
           <GameFilter onFilterChange={setFilters} />
           {loading ? (
             <div className={styles.loaderContainer}>
-              <ClipLoader color="#f39c12" size={50} />
+              <ClipLoader color="#179CFF" size={50} />
             </div>
           ) : (
             <section className={styles.gameList}>

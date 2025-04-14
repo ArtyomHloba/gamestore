@@ -55,7 +55,7 @@ function MyGames() {
 
       {loading ? (
         <div className={styles.loaderContainer}>
-          <ClipLoader color="#f39c12" size={50} className={styles.loader} />
+          <ClipLoader color="#179CFF" size={50} className={styles.loader} />
         </div>
       ) : gamesWithKeys.length === 0 ? (
         <p className={styles.noGames}>

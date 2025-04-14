@@ -32,11 +32,11 @@
 
 .filterContainer input[type="range"] {
   flex: 1;
-  accent-color: #f39c12;
+  accent-color: #179cff;
 }
 
 .filterContainer span {
   font-weight: bold;
   font-size: 16px;
-  color: #f39c12;
+  color: #179cff;
 }
