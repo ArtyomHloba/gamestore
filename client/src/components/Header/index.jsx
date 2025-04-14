@@ -39,7 +39,6 @@ function Header() {
       </div>
 
       <div className={styles.signUpContainer}>
-        {/* Wishlist */}
         <Link to="/wishlist" className={styles.navItem}>
           <motion.div
             whileHover={{ scale: 1.1 }}
@@ -52,7 +51,6 @@ function Header() {
           </motion.div>
         </Link>
 
-        {/* Profile */}
         <Link to="/my-games" className={styles.navItem}>
           <motion.div
             whileHover={{ scale: 1.1 }}
@@ -65,7 +63,6 @@ function Header() {
           </motion.div>
         </Link>
 
-        {/* Login */}
         <Link to="/login" className={styles.navItem}>
           <motion.div
             whileHover={{ scale: 1.1 }}
@@ -78,7 +75,6 @@ function Header() {
           </motion.div>
         </Link>
 
-        {/* Sign up */}
         {!isLoggedIn && (
           <Link to="/signup" className={styles.navItem}>
             <motion.div
