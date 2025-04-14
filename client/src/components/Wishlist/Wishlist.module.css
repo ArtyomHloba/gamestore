@@ -78,7 +78,7 @@
 }
 
 .buyButton {
-  background-color: #179cff;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
   color: #fff;
   border: none;
   border-radius: 0 0 10px 10px;
@@ -90,7 +90,7 @@
 }
 
 .buyButton:hover {
-  background-color: #179cff;
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
 }
 
 .loaderContainer {

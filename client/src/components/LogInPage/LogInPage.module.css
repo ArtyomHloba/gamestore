@@ -39,7 +39,7 @@ label {
 .logOutBtn {
   width: 100%;
   padding: 14px;
-  background-color: #179cff;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -50,7 +50,7 @@ label {
 }
 
 .logOutBtn:hover {
-  background-color: #179cff;
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
 }
 
 .errorValid {
