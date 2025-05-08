@@ -27,20 +27,26 @@ function GameCard() {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    const loadGames = async () => {
+    const loadGamesAndWishlist = async () => {
       setLoading(true);
       try {
-        const data = await fetchGames();
-        setGames(data);
-        setFilteredGames(data);
+        const user = await fetchCurrentUser();
+        if (user) {
+          const wishlistData = await fetchWishlist(user.id);
+          setWishlist(wishlistData.map(game => game.game_id));
+        }
+
+        const gamesData = await fetchGames();
+        setGames(gamesData);
+        setFilteredGames(gamesData);
       } catch (error) {
-        console.error("Error loading games:", error);
+        console.error("Error loading data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    loadGames();
+    loadGamesAndWishlist();
   }, []);
 
   useEffect(() => {
@@ -60,22 +66,6 @@ function GameCard() {
   const handlePaymentSuccess = () => {
     setSelectedGame(null);
   };
-
-  const handleWishlistUpdate = async () => {
-    try {
-      const user = await fetchCurrentUser();
-      if (user) {
-        const wishlistData = await fetchWishlist(user.id);
-        setWishlist(wishlistData);
-      }
-    } catch (error) {
-      console.error("Error updating wishlist:", error);
-    }
-  };
-
-  useEffect(() => {
-    handleWishlistUpdate();
-  }, []);
 
   const toggleWishlist = async game => {
     try {
