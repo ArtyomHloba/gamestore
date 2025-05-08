@@ -49,7 +49,9 @@ function Wishlist() {
           onPaymentSuccess={handlePaymentSuccess}
         />
       ) : wishlist.length === 0 ? (
-        <p className={styles.noWishListGames}>Your wishlist is empty.</p>
+        <p className={styles.noWishListGames}>
+          Your wishlist is empty, please log in
+        </p>
       ) : (
         <div className={styles.wishlistGrid}>
           {wishlist.map(game => (

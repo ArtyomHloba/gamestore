@@ -5,6 +5,8 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import GameFilter from "../GameFilter/index";
 import PaymentForm from "../PaymentForm";
 import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./GameCard.module.css";
 
 function GameCard() {
@@ -82,16 +84,27 @@ function GameCard() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      alert("You need to be logged in to add to wishlist.");
+      toast.error("You need to be logged in to add to wishlist.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
     }
 
     if (wishlist.includes(game.game_id)) {
       await removeFromWishlist(user.id, game.game_id);
       setWishlist(wishlist.filter(id => id !== game.game_id));
+      toast.info(`${game.title} removed from wishlist.`, {
+        position: "top-center",
+        autoClose: 3000,
+      });
     } else {
       await addToWishlist(user.id, game.game_id);
       setWishlist([...wishlist, game.game_id]);
+      toast.success(`${game.title} added to wishlist!`, {
+        position: "top-center",
+        autoClose: 3000,
+      });
     }
   };
 
