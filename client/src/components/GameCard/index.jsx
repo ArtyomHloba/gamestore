@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../supabaseClient";
-import { addToWishlist, removeFromWishlist } from "../../api";
+import {
+  fetchGames,
+  fetchWishlist,
+  addToWishlist,
+  removeFromWishlist,
+  fetchCurrentUser,
+} from "../../api";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import GameFilter from "../GameFilter/index";
 import PaymentForm from "../PaymentForm";
@@ -22,24 +27,25 @@ function GameCard() {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    const fetchGames = async () => {
+    const loadGames = async () => {
       setLoading(true);
-
-      let { data, error } = await supabase.from("game").select("*");
-      if (!error) {
+      try {
+        const data = await fetchGames();
         setGames(data);
         setFilteredGames(data);
+      } catch (error) {
+        console.error("Error loading games:", error);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
-    fetchGames();
+    loadGames();
   }, []);
 
   useEffect(() => {
     const applyFilters = () => {
-      let filtered = games.filter(
+      const filtered = games.filter(
         game =>
           game.title.toLowerCase().includes(filters.search.toLowerCase()) &&
           (filters.genre === "" || game.genre === filters.genre) &&
@@ -56,20 +62,14 @@ function GameCard() {
   };
 
   const handleWishlistUpdate = async () => {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (!userError && user) {
-      const { data: wishlistData, error: wishlistError } = await supabase
-        .from("wishlist")
-        .select("*")
-        .eq("user_id", user.id);
-
-      if (!wishlistError) {
-        setWishlist(wishlistData.map(item => item.game_id));
+    try {
+      const user = await fetchCurrentUser();
+      if (user) {
+        const wishlistData = await fetchWishlist(user.id);
+        setWishlist(wishlistData);
       }
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
     }
   };
 
@@ -78,33 +78,33 @@ function GameCard() {
   }, []);
 
   const toggleWishlist = async game => {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
+    try {
+      const user = await fetchCurrentUser();
+      if (!user) {
+        toast.error("You need to be logged in to add to wishlist.", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+        return;
+      }
 
-    if (userError || !user) {
-      toast.error("You need to be logged in to add to wishlist.", {
-        position: "top-center",
-        autoClose: 3000,
-      });
-      return;
-    }
-
-    if (wishlist.includes(game.game_id)) {
-      await removeFromWishlist(user.id, game.game_id);
-      setWishlist(wishlist.filter(id => id !== game.game_id));
-      toast.info(`${game.title} removed from wishlist.`, {
-        position: "top-center",
-        autoClose: 3000,
-      });
-    } else {
-      await addToWishlist(user.id, game.game_id);
-      setWishlist([...wishlist, game.game_id]);
-      toast.success(`${game.title} added to wishlist!`, {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      if (wishlist.includes(game.game_id)) {
+        await removeFromWishlist(user.id, game.game_id);
+        setWishlist(wishlist.filter(id => id !== game.game_id));
+        toast.info(`${game.title} removed from wishlist.`, {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      } else {
+        await addToWishlist(user.id, game.game_id);
+        setWishlist([...wishlist, game.game_id]);
+        toast.success(`${game.title} added to wishlist!`, {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
     }
   };
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../supabaseClient";
-import { fetchWishlist } from "../../api";
+import { fetchWishlist, fetchCurrentUser } from "../../api";
 import PaymentForm from "../PaymentForm";
 import ClipLoader from "react-spinners/ClipLoader";
 import styles from "./Wishlist.module.css";
@@ -13,20 +12,22 @@ function Wishlist() {
   useEffect(() => {
     const loadWishlist = async () => {
       setLoading(true);
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
 
-      if (userError || !user) {
-        console.error("User is not authenticated:", userError);
+      try {
+        const user = await fetchCurrentUser();
+        if (!user) {
+          console.error("User is not authenticated");
+          setLoading(false);
+          return;
+        }
+
+        const wishlistData = await fetchWishlist(user.id);
+        setWishlist(wishlistData);
+      } catch (error) {
+        console.error("Error loading wishlist:", error);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      const wishlistData = await fetchWishlist(user.id);
-      setWishlist(wishlistData);
-      setLoading(false);
     };
 
     loadWishlist();

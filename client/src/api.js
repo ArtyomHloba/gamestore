@@ -81,6 +81,15 @@ export const fetchPurchaseById = async purchaseId => {
   return data;
 };
 
+export const fetchGames = async () => {
+  const { data, error } = await supabase.from("game").select("*");
+  if (error) {
+    console.error("Error fetching games:", error);
+    throw error;
+  }
+  return data;
+};
+
 export const fetchWishlist = async userId => {
   const { data, error } = await supabase
     .from("wishlist")
@@ -130,4 +139,13 @@ export const removeFromWishlist = async (userId, gameId) => {
     console.error("Error removing from wishlist:", error);
     throw error;
   }
+};
+
+export const fetchCurrentUser = async () => {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    console.error("Error fetching current user:", error);
+    throw error;
+  }
+  return data.user;
 };
