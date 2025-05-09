@@ -27,18 +27,18 @@ function GameCard() {
   const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    const loadGamesAndWishlist = async () => {
+    const loadGames = async () => {
       setLoading(true);
       try {
+        const gamesData = await fetchGames();
+        setGames(gamesData);
+        setFilteredGames(gamesData);
+
         const user = await fetchCurrentUser();
         if (user) {
           const wishlistData = await fetchWishlist(user.id);
           setWishlist(wishlistData.map(game => game.game_id));
         }
-
-        const gamesData = await fetchGames();
-        setGames(gamesData);
-        setFilteredGames(gamesData);
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -46,7 +46,7 @@ function GameCard() {
       }
     };
 
-    loadGamesAndWishlist();
+    loadGames();
   }, []);
 
   useEffect(() => {
@@ -70,13 +70,6 @@ function GameCard() {
   const toggleWishlist = async game => {
     try {
       const user = await fetchCurrentUser();
-      if (!user) {
-        toast.error("You need to be logged in to add to wishlist.", {
-          position: "top-center",
-          autoClose: 3000,
-        });
-        return;
-      }
 
       if (wishlist.includes(game.game_id)) {
         await removeFromWishlist(user.id, game.game_id);
@@ -95,6 +88,11 @@ function GameCard() {
       }
     } catch (error) {
       console.error("Error toggling wishlist:", error);
+
+      toast.error("Please log in to add games to your wishlist.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
     }
   };
 
